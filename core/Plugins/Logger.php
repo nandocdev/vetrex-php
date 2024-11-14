@@ -23,7 +23,7 @@ class Logger implements LoggerInterface {
    public function __construct() {
       $cfg = new Config();
       $this->logger = new MonoLogger('vertex');
-      $this->logger->pushHandler(new StreamHandler($cfg->get('path.tmp') . '/logs/' . date('ymd') . '_vrtx.log'));
+      $this->logger->pushHandler(new StreamHandler($cfg->get('path.tmp') . '/logs/vrtx_' . date('ymd') . '_.log'));
       $this->logger->pushProcessor(new UidProcessor());
    }
 

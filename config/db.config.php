@@ -16,9 +16,9 @@ return [
          'driver' => 'mysql',
          'host' => 'localhost',
          'port' => 3306,
-         'database' => '',
-         'username' => '',
-         'password' => '',
+         'database' => 'vertex',
+         'username' => 'desarrollo',
+         'password' => '1q2w3e4r5t*',
          'charset' => 'utf8mb4',
          'collation' => 'utf8mb4_unicode_ci',
          'options' => [

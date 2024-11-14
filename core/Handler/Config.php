@@ -65,6 +65,9 @@ class Config {
 
    // obtiene la url base del proyecto
    private function getUrl(): string {
+      if (!isset($_SERVER['HTTP_HOST'])) {
+         return '';
+      }
       $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
       $host = $_SERVER['HTTP_HOST'];
       $uri = $protocol . '://' . $host;

@@ -81,7 +81,7 @@ class Router {
          $route = $this->routeMatcher->match($request->method, $request->url, $this->routeCollection);
 
          if ($route === null) {
-            new NotFoundHttpException('Route not found');
+            new NotFoundHttpException('Route not found ' . $request->url);
             $this->handleRouteNotFound($response);
             return;
          }

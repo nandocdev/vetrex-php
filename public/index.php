@@ -48,8 +48,8 @@ try {
       $container
    );
 
-   $router->get('/home', function (Request $request, Response $response) {
-      $response->json(['message' => 'Welcome to the home page']);
+   $router->get('/', function (Request $request, Response $response) {
+      $response->json(['message' => 'Welcome to the home page ' . (new \Vertex\Core\Handler\Config())->get('app.name')]);
    });
 
    $router->dispatch();
