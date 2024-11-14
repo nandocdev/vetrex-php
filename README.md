@@ -1,6 +1,6 @@
 # Vertex
 
-**Vertex** es un framework base en PHP diseñado para proporcionar una arquitectura modular y escalable, ideal para construir aplicaciones web modernas. Su estructura flexible permite una rápida implementación de nuevos proyectos y asegura la mantenibilidad y reutilización de componentes clave. Vertex encapsula funcionalidades esenciales como enrutamiento, inyección de dependencias, manejo de errores y logging, proporcionando una base sólida para cualquier proyecto.
+**Vertex** es un framework base en PHP diseñado para proporcionar una arquitectura modular y escalable, ideal para construir aplicaciones web modernas. Su estructura flexible permite una rápida implementación de nuevos proyectos y asegura la mantenibilidad y reutilización de componentes clave. Vertex encapsula funcionalidades esenciales como enrutamiento, inyección de dependencias, manejo de errores, logging y abstracción de consultas SQL, proporcionando una base sólida para cualquier proyecto.
 
 ## Estructura del Proyecto
 
@@ -11,7 +11,7 @@
 ├── core                 # Núcleo del framework (contiene Bootstrap, Handler, VQuery, VRouter)
 │   ├── Bootstrap        # Inicialización y carga de servicios
 │   ├── Handler          # Manejo de errores y logger
-│   ├── VQuery           # Abstracción de consultas/ORM
+│   ├── VQuery           # Abstracción de consultas SQL/ORM
 │   └── VRouter          # Enrutamiento de la aplicación
 ├── public               # Directorio público (punto de entrada `index.php`, assets)
 ├── src                  # Módulos e interfaces del framework
@@ -33,7 +33,7 @@ Los siguientes paquetes han sido instalados para proporcionar funcionalidades es
 
 ## Requisitos Previos
 
-- **PHP >= 7.4**
+- **PHP >= 8.3**
 - **Composer**
 
 ## Instalación
@@ -41,7 +41,7 @@ Los siguientes paquetes han sido instalados para proporcionar funcionalidades es
 1. Clona este repositorio:
 
    ```bash
-   git clone https://github.com/tu_usuario/vertex.git
+   git clone https://github.com/nandocdev/vetrex-php.git
    ```
 
 2. Navega al directorio del proyecto:
@@ -68,9 +68,17 @@ Los siguientes paquetes han sido instalados para proporcionar funcionalidades es
 4. **Ejecutar Comandos CLI**: Agrega comandos en `src/Commands` y ejecútalos usando el componente de consola de Symfony.
 5. **Depurar**: Usa la clase `Debug` en `core` para aprovechar Kint en la depuración.
 
-## Ejemplo de Código
+### Conexión a la Base de Datos
 
-Aquí tienes un ejemplo básico de cómo crear una ruta y un controlador:
+Vertex incluye una capa de abstracción para consultas SQL. Utiliza el `QueryBuilderFacade` para construir y ejecutar consultas de manera sencilla:
+
+```php
+// Ejemplo de uso del QueryBuilderFacade para una consulta SELECT
+$queryBuilder = new QueryBuilderFacade('users');
+$queryBuilder->select()->where('id', '=', 1)->execute();
+```
+
+### Definir Rutas y Controladores
 
 1. **Definir una ruta en `Router.php`**:
 
@@ -91,6 +99,29 @@ Aquí tienes un ejemplo básico de cómo crear una ruta y un controlador:
    ```
 
 3. Accede a `http://tu-dominio/hello` para ver el resultado.
+
+### Realizar Operaciones CRUD
+
+Vertex también facilita la creación de consultas CRUD mediante el uso de los `QueryBuilder` para las operaciones de base de datos:
+
+```php
+// Insertar un nuevo registro
+$queryBuilder = new QueryBuilderFacade('users');
+$queryBuilder->insert()->set([
+   'name' => 'John Doe',
+   'email' => 'johndoe@example.com'
+])->execute();
+
+// Actualizar un registro
+$queryBuilder = new QueryBuilderFacade('users');
+$queryBuilder->update()->set([
+   'name' => 'Jane Doe'
+])->where('id', '=', 1)->execute();
+
+// Eliminar un registro
+$queryBuilder = new QueryBuilderFacade('users');
+$queryBuilder->delete()->where('id', '=', 1)->execute();
+```
 
 ## Testing
 
