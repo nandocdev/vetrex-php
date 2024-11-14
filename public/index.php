@@ -11,7 +11,7 @@
 declare(strict_types=1);
 
 use Kint\Kint;
-
+use Vertex\Core\Bootstrap\App;
 // TODO: Deshabilitar en producción
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -21,9 +21,13 @@ $vendor = __DIR__ . '/../vendor/autoload.php';
 if (!file_exists($vendor)) {
    die('Please run: composer install');
 }
-
 require $vendor;
 
-$container = Vertex\Core\Bootstrap\Container::build();
+try {
+   $container = Vertex\Core\Bootstrap\Container::build();
+   App::run();
 
-Kint::dump($container);
+   Kint::dump($container);
+} catch (\Exception $e) {
+   Kint::dump($e->getMessage());
+}
