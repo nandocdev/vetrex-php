@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use Kint\Kint;
 use Vertex\Core\Bootstrap\App;
+
 // TODO: Deshabilitar en producción
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -26,6 +27,10 @@ require $vendor;
 try {
    $container = Vertex\Core\Bootstrap\Container::build();
    App::run();
+
+   // implementa gestión de errores
+   set_error_handler('Vertex\Core\Handler\VertexExceptions::errorHandler');
+   set_exception_handler('Vertex\Core\Handler\VertexExceptions::exceptionHandler');
 
    Kint::dump($container);
 } catch (\Exception $e) {
