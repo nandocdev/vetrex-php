@@ -25,7 +25,7 @@
             "Vertex\\Src\\": "src/"
         },
         "files": [
-            "core/Helpers.php"
+            "core/Helpers/VertexHelper.php"
         ]
     },
     "require-dev": {
