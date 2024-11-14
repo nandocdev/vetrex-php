@@ -90,6 +90,14 @@ class Request {
       return $headers;
    }
 
+   public function getHeader(string $name): string {
+      return $this->headers[$name] ?? '';
+   }
+
+   public function setUser(array $user): void {
+      $this->sessions['user'] = $user;
+   }
+
    private function determineMethod(): string {
       $override = $this->getServerVar('HTTP_X_HTTP_METHOD_OVERRIDE');
       if ($override) {
@@ -134,6 +142,7 @@ class Request {
       }
       return '';
    }
+
 
    private function isAjaxRequest(): bool {
       return strtolower($this->getServerVar('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';

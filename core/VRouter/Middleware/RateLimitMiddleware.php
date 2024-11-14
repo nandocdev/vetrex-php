@@ -11,6 +11,8 @@
 declare(strict_types=1);
 
 namespace Vertex\Core\VRouter\Middleware;
+
+use Vertex\Core\VRouter\Handler\MiddlewareHandler;
 use Vertex\Core\VRouter\Http\Request;
 use Vertex\Core\VRouter\Http\Response;
 class RateLimitMiddleware {
