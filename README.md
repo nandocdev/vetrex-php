@@ -106,4 +106,4 @@ composer test
 
 ## Licencia
 
-Este proyecto está licenciado bajo la licencia MIT.
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.

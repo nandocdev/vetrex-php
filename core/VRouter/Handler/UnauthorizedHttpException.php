@@ -11,6 +11,8 @@
 declare(strict_types=1);
 
 namespace Vertex\Core\VRouter\Handler;
+
+use Vertex\Core\Plugins\Logger;
 use \Exception;
 
 class UnauthorizedHttpException extends Exception {
@@ -22,6 +24,7 @@ class UnauthorizedHttpException extends Exception {
 
       // Llama al constructor de la clase base (Exception)
       parent::__construct($message, $code, $previous);
+      (new Logger())->error($message);
    }
 
    // Método para obtener el código de estado HTTP

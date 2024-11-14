@@ -11,7 +11,10 @@
 declare(strict_types=1);
 
 namespace Vertex\Core\VRouter;
+
+use DI\NotFoundException;
 use Vertex\Core\VRouter\Collection\RouteCollection;
+use Vertex\Core\VRouter\Handler\NotFoundHttpException;
 use Vertex\Core\VRouter\Matcher\RouteMatcher;
 use Vertex\Core\VRouter\Handler\ControllerInvoker;
 use Vertex\Core\VRouter\Handler\MiddlewareHandler;
@@ -78,6 +81,7 @@ class Router {
          $route = $this->routeMatcher->match($request->method, $request->url, $this->routeCollection);
 
          if ($route === null) {
+            new NotFoundHttpException('Route not found');
             $this->handleRouteNotFound($response);
             return;
          }
@@ -88,6 +92,7 @@ class Router {
          // Invoke controller
          $this->controllerInvoker->invoke($route['callback'], $request, $response);
       } catch (\Exception $e) {
+
          $this->handleServerError($response, $e);
       }
    }

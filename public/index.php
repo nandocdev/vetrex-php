@@ -13,6 +13,14 @@ declare(strict_types=1);
 use Kint\Kint;
 use Vertex\Core\Bootstrap\App;
 
+use Vertex\Core\VRouter\Collection\RouteCollection;
+use Vertex\Core\VRouter\Matcher\RouteMatcher;
+use Vertex\Core\VRouter\Router;
+use Vertex\Core\VRouter\Handler\ControllerInvoker;
+use Vertex\Core\VRouter\Handler\MiddlewareHandler;
+use Vertex\Core\VRouter\Http\Request;
+use Vertex\Core\VRouter\Http\Response;
+
 // TODO: Deshabilitar en producción
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -32,7 +40,20 @@ try {
    set_error_handler('Vertex\Core\Handler\VertexExceptions::errorHandler');
    set_exception_handler('Vertex\Core\Handler\VertexExceptions::exceptionHandler');
 
-   Kint::dump($container);
+   $router = new Router(
+      new RouteCollection(),
+      new RouteMatcher(),
+      new MiddlewareHandler($container),
+      new ControllerInvoker($container),
+      $container
+   );
+
+   $router->get('/home', function (Request $request, Response $response) {
+      $response->json(['message' => 'Welcome to the home page']);
+   });
+
+   $router->dispatch();
+
 } catch (\Exception $e) {
    Kint::dump($e->getMessage());
 }
