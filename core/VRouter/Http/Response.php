@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Vertex\Core\VRouter\Http;
 use Vertex\Core\Handler\Config;
+use Vertex\Core\RenderX\View;
 class Response {
    private string $body = '';
    private array $headers = [];
@@ -164,7 +165,23 @@ class Response {
    }
 
    public function classNamespace($controller): void {
+      $controller = explode('\\', $controller);
+      array_shift($controller);
+      array_pop($controller);
+      $controller = implode(DIRECTORY_SEPARATOR, $controller);
+      $controller = lcfirst($controller);
       $this->controllerNamespace = $controller;
+   }
+
+   public function getNamespace(): string {
+      return $this->controllerNamespace;
+   }
+
+   public function render(string $view, array $data = [], string $layout = 'default'): self {
+      $view = new View($view, $data, $layout);
+      $view->setViewPath($this->controllerNamespace . '/Views/');
+      $this->setBody($view->render());
+      return $this;
    }
 
    public function __destruct() {

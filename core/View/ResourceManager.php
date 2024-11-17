@@ -16,9 +16,10 @@ class ResourceManager {
    private array $scripts = [];
    private array $styles = [];
    private array $resourcePaths = ['assets/'];
+   const DS = DIRECTORY_SEPARATOR;
 
-   public function addResourcePath(string $path) {
-      $this->resourcePaths[] = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+   public function addResourcePath(string $path): void {
+      $this->resourcePaths[] = rtrim($path, self::DS) . self::DS;
    }
 
    private function findResource(string $filename): string|null {
@@ -31,7 +32,7 @@ class ResourceManager {
       return null;
    }
 
-   public function addScript(string $src, array $dependencies = [], bool $inline = false) {
+   public function addScript(string $src, array $dependencies = [], bool $inline = false): void {
       if (!$this->isResourceAdded($this->scripts, $src)) {
          $this->scripts[] = ['src' => $src, 'deps' => $dependencies, 'inline' => $inline];
       }

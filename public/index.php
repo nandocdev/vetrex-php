@@ -21,6 +21,9 @@ use Vertex\Core\VRouter\Handler\MiddlewareHandler;
 use Vertex\Core\VRouter\Http\Request;
 use Vertex\Core\VRouter\Http\Response;
 
+// controllers
+use Vertex\App\Modules\Users\UserController;
+
 // TODO: Deshabilitar en producción
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -48,9 +51,10 @@ try {
       $container
    );
 
-   $router->get('/', function (Request $request, Response $response) {
-      $response->json(['message' => 'Welcome to the home page ' . (new \Vertex\Core\Handler\Config())->get('app.name')]);
-   });
+   // router get from users module 
+   $router->get('/', [UserController::class, 'index']);
+
+
 
    $router->dispatch();
 

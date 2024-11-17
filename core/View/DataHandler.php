@@ -6,7 +6,7 @@
  * @author      Fernando Castillo <nando.castillo@outlook.com>
  * @date        2024-11-16 11:12:57
  * @version     1.0.0
- * @description
+ * @description: Manejador de datos para las vistas.
  */
 declare(strict_types=1);
 
@@ -15,10 +15,10 @@ namespace Vertex\Core\View;
 use InvalidArgumentException;
 
 class DataHandler {
-   private $data = [];
-   private $breadcrumbs = [];
+   private array $data = [];
+   private array $breadcrumbs = [];
 
-   public function setData(array $data, bool $overwrite = true) {
+   public function setData(array $data, bool $overwrite = true): void {
       if (!is_array($data)) {
          throw new InvalidArgumentException("Los datos deben ser un array.");
       }
@@ -32,7 +32,7 @@ class DataHandler {
       return $this->data[$key] ?? $default;
    }
 
-   public function setBreadcrumb(string $label, ?string $url = null) {
+   public function setBreadcrumb(string $label, ?string $url = null): void {
       if (!is_string($label) || empty($label)) {
          throw new InvalidArgumentException("El label debe ser una cadena no vacía.");
       }
@@ -42,7 +42,7 @@ class DataHandler {
       $this->breadcrumbs[] = ['label' => $label, 'url' => $url];
    }
 
-   public function getBreadcrumbs() {
+   public function getBreadcrumbs(): array {
       return $this->breadcrumbs;
    }
 
