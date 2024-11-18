@@ -26,11 +26,11 @@ return [
    ],
    'path' => [
       'root' => dirname(__DIR__),
-      'app' => dirname(__DIR__) . '/app',
-      'config' => dirname(__DIR__) . '/config',
-      'public' => dirname(__DIR__) . '/public',
-      'tmp' => dirname(__DIR__) . '/tmp',
-      'vendor' => dirname(__DIR__) . '/vendor',
+      'app' => dirname(__DIR__) . '/app' . DIRECTORY_SEPARATOR,
+      'config' => dirname(__DIR__) . '/config' . DIRECTORY_SEPARATOR,
+      'public' => dirname(__DIR__) . '/public' . DIRECTORY_SEPARATOR,
+      'tmp' => dirname(__DIR__) . '/tmp' . DIRECTORY_SEPARATOR,
+      'vendor' => dirname(__DIR__) . '/vendor' . DIRECTORY_SEPARATOR,
    ],
    'mail' => [
       'driver' => 'smtp',

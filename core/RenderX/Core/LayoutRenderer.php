@@ -16,7 +16,5 @@ declare(strict_types=1);
 namespace Vertex\Core\RenderX\Core;
 
 class LayoutRenderer {
-   function __construct() {
 
-   }
 }

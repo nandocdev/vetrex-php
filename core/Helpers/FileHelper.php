@@ -45,7 +45,6 @@ class FileHelper {
       if (!self::fileExists($file)) {
          throw new Exception("El archivo no existe: $file");
       }
-
       return file_get_contents($file);
    }
 
@@ -142,4 +141,22 @@ class FileHelper {
       }
       return true;
    }
+
+   /**
+    * Copia un archivo de una ubicación a otra.
+    *
+    * @param string $source La ruta del archivo original.
+    * @param string $destination La ruta destino donde se debe copiar el archivo.
+    * @return bool True si el archivo se copió correctamente, false si no.
+    * @throws Exception Si el archivo original no existe.
+    */
+   public static function copyFile(string $source, string $destination): bool {
+      if (!self::fileExists($source)) {
+         throw new Exception("El archivo original no existe: $source");
+      }
+
+      return copy($source, $destination);
+   }
+
+
 }
