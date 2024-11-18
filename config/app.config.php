@@ -29,6 +29,8 @@ return [
       'app' => dirname(__DIR__) . '/app' . DIRECTORY_SEPARATOR,
       'config' => dirname(__DIR__) . '/config' . DIRECTORY_SEPARATOR,
       'public' => dirname(__DIR__) . '/public' . DIRECTORY_SEPARATOR,
+      'assets' => dirname(__DIR__) . '/public/assets' . DIRECTORY_SEPARATOR,
+      'templates' => dirname(__DIR__) . '/public/templates' . DIRECTORY_SEPARATOR,
       'tmp' => dirname(__DIR__) . '/tmp' . DIRECTORY_SEPARATOR,
       'vendor' => dirname(__DIR__) . '/vendor' . DIRECTORY_SEPARATOR,
    ],

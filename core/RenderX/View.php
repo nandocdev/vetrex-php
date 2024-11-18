@@ -9,39 +9,46 @@
  * @description Clase principal de RenderX encargada de gestionar el proceso completo 
  *              de renderizado de vistas. Incluye el manejo de datos, parciales y layouts, 
  *              además de integrarse con el gestor de caché y recursos.
+ * @license     MIT
+ * @algoritmo:
+ *  
  */
 
 declare(strict_types=1);
 
 namespace Vertex\Core\RenderX;
 
+use Vertex\Core\RenderX\Components\RenderView;
+use Vertex\Core\RenderX\Components\ViewLoader;
 use Vertex\Core\Handler\Config;
-
 class View {
+   private RenderView $renderView;
+   private ViewLoader $viewLoader;
    private Config $config;
-   protected string $view;
-   protected array $data = [];
-   protected string $layout = 'default';
-   private string $layoutPath = 'public/layouts/';
+   private array $filesContent = [];
    private string $viewPath;
+   private string $layoutPath;
+   private string $partialPath;
+   private array $markers = [];
 
-   public function __construct(string $view, array $data = [], string $layout = 'default') {
+   public function __construct(string $viewPath, string $view, string $layoutPath = '') {
+      $this->renderView = new RenderView();
+      $this->viewLoader = new ViewLoader();
       $this->config = new Config();
-      $this->view = $view;
-      $this->data = $data;
-      $this->viewPath = 'public/views/';
+      $this->viewPath = $this->viewLoader->loadLayout($viewPath, $view);
+      $this->layoutPath = $this->viewLoader->loadTemplate($layoutPath);
    }
 
-   public function setViewPath(string $path) {
-      $this->viewPath = $path;
+   // reemplaza el marcador @content en el layout por el contenido de la vista
+   private function mergeView() {
+      $template = $this->renderView->load($this->layoutPath);
+      $view = $this->renderView->load($this->viewPath);
+      return str_replace('@content', $view, $template);
    }
 
-   public function setLayoutPath(string $path) {
-      $this->layoutPath = $path;
-   }
-
-   public function render(): string {
-      return "Rendered view: {$this->config->get('path.root')}/{$this->viewPath}{$this->view}.phtml";
+   public function render(array $data = []): string {
+      $content = $this->mergeView();
+      return $this->renderView->compile($content, $data);
    }
 
 }

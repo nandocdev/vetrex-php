@@ -178,9 +178,9 @@ class Response {
    }
 
    public function render(string $view, array $data = [], string $layout = 'default'): self {
-      $view = new View($view, $data, $layout);
-      $view->setViewPath($this->controllerNamespace . '/Views/');
-      $this->setBody($view->render());
+      $view = new View($this->controllerNamespace, $view, $layout);
+      $data['nombre'] = 'Fernando Castillo';
+      $this->setBody($view->render($data));
       return $this;
    }
 
