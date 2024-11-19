@@ -20,10 +20,13 @@ namespace Vertex\Core\RenderX;
 
 use Vertex\Core\RenderX\Components\RenderView;
 use Vertex\Core\RenderX\Components\ViewLoader;
+use Vertex\Core\RenderX\Components\DataHandler;
 use Vertex\Core\Handler\Config;
+
 class View {
    private RenderView $renderView;
    private ViewLoader $viewLoader;
+   private DataHandler $dataHandler;
    private Config $config;
    private array $filesContent = [];
    private string $viewPath;
@@ -31,15 +34,32 @@ class View {
    private string $partialPath;
    private array $markers = [];
 
-   public function __construct(string $viewPath, string $view, string $layoutPath = '') {
-      $this->renderView = new RenderView();
-      $this->viewLoader = new ViewLoader();
-      $this->config = new Config();
-      $this->viewPath = $this->viewLoader->loadLayout($viewPath, $view);
-      $this->layoutPath = $this->viewLoader->loadTemplate($layoutPath);
+   public function __construct(Config $config, DataHandler $dataHandler, ViewLoader $viewLoader, RenderView $renderView) {
+      $this->config = $config;
+      $this->dataHandler = $dataHandler;
+      $this->viewLoader = $viewLoader;
+      $this->renderView = $renderView;
    }
 
-   // reemplaza el marcador @content en el layout por el contenido de la vista
+
+   public function setLayoutPath(string $layoutPath): self {
+      $this->layoutPath = $this->viewLoader->loadTemplate($layoutPath);
+      return $this;
+   }
+
+   public function setPartialPath(string $partialPath): self {
+      $this->partialPath = $partialPath;
+      return $this;
+   }
+
+   public function setViewPath(string $viewPath, string $viewName): self {
+      $this->viewPath = $this->viewLoader->loadLayout($viewPath, $viewName);
+      return $this;
+   }
+
+
+
+
    private function mergeView() {
       $template = $this->renderView->load($this->layoutPath);
       $view = $this->renderView->load($this->viewPath);

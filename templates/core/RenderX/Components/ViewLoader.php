@@ -26,7 +26,7 @@ class ViewLoader {
       $this->config = new Config();
    }
 
-   public function loadTemplate(string $template = 'default'): string {
+   public function loadTemplate(string $template): string {
       $this->templatesPath = $this->config->get('path.templates');
       $file = $this->templatesPath . $template . DIRECTORY_SEPARATOR . 'index.template.phtml';
       if (!file_exists($file)) {
@@ -37,7 +37,7 @@ class ViewLoader {
 
 
 
-   public function loadLayout(string $pathModule, string $layout = 'index'): string {
+   public function loadLayout(string $pathModule, string $layout): string {
       $this->layoutsPath = $this->config->get('path.root') . DIRECTORY_SEPARATOR . $pathModule . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . $layout . '.view.phtml';
       if (!file_exists($this->layoutsPath)) {
          throw new \InvalidArgumentException("El archivo de layout no existe: $this->layoutsPath");

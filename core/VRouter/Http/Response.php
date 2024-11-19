@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace Vertex\Core\VRouter\Http;
 use Vertex\Core\Handler\Config;
-use Vertex\Core\RenderX\View;
+use Vertex\Core\RenderX\Core\RenderView;
+use Vertex\Core\RenderX\Core\TemplateLoader;
+use Vertex\Core\RenderX\Core\DataHandler;
+use Vertex\Core\RenderX\Render;
 class Response {
    private string $body = '';
    private array $headers = [];
@@ -28,6 +31,26 @@ class Response {
       $this->headers['Content-Type'] = 'text/html; charset=utf-8';
       $this->headers['X-Powered-By'] = $this->config->get('app.name') . ' ' . $this->config->get('app.version');
       $this->sessions = $_SESSION;
+   }
+
+   public function classNamespace($controller): void {
+      $controller = explode('\\', $controller);
+      array_shift($controller);
+      array_pop($controller);
+      $controller = implode(DIRECTORY_SEPARATOR, $controller);
+      $controller = lcfirst($controller);
+      $this->controllerNamespace = $controller;
+   }
+
+
+
+   public function render(string $viewName, array $data = [], string $layout = 'default'): self {
+      $dataHandler = new DataHandler();
+      $viewLoader = new TemplateLoader($this->config);
+      // $renderView = new ();
+      $view = new Render($this->config, $dataHandler, $viewLoader);
+      $view->render($this->controllerNamespace, $viewName, $data, $layout);
+      return $this;
    }
 
    public function addHeader(string $key, string $value): self {
@@ -164,25 +187,7 @@ class Response {
       }
    }
 
-   public function classNamespace($controller): void {
-      $controller = explode('\\', $controller);
-      array_shift($controller);
-      array_pop($controller);
-      $controller = implode(DIRECTORY_SEPARATOR, $controller);
-      $controller = lcfirst($controller);
-      $this->controllerNamespace = $controller;
-   }
 
-   public function getNamespace(): string {
-      return $this->controllerNamespace;
-   }
-
-   public function render(string $view, array $data = [], string $layout = 'default'): self {
-      $view = new View($this->controllerNamespace, $view, $layout);
-      $data['nombre'] = 'Fernando Castillo';
-      $this->setBody($view->render($data));
-      return $this;
-   }
 
    public function __destruct() {
       $this->buildHeaders();
