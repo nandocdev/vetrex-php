@@ -76,14 +76,14 @@ class TemplateLoader {
     * @throws \InvalidArgumentException
     * @return string
     */
-   // public function loadPartial(string $partial, string $type): string {
-   //    $this->partialsPath = $this->config->get('path.partials');
-   //    $partialPath = ($type === 'layout') ? $this->layoutsPath : $this->partialsPath;
-   //    $file = $partialPath . DS . 'partials' . DS . $partial . '.partial.phtml';
-   //    if (!file_exists($file)) {
-   //       throw new \InvalidArgumentException("El archivo de partial no existe: $file");
-   //    }
-   //    return $file;
-   // }
+   public function loadPartial(string $partial, string $type): string {
+      $this->partialsPath = $this->config->get('path.partials');
+      $partialPath = ($type === 'layout') ? $this->layoutsPath : $this->partialsPath;
+      $file = $partialPath . DS . 'partials' . DS . $partial . '.partial.phtml';
+      if (!file_exists($file)) {
+         throw new \InvalidArgumentException("El archivo de partial no existe: $file");
+      }
+      return $file;
+   }
 
 }

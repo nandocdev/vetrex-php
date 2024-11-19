@@ -39,12 +39,23 @@ class RenderView {
 
    // metodo extractPartials, busca en el contenido de la vista los marcadores @partial('partial', ?'type') y genera la ruta del archivo partial
    public function extractPartials(string $content): string {
-      $pattern = '/@partial\((\'|")(?<partial>.*)(\'|")\)/';
-      preg_match_all($pattern, $content, $matches);
-      $partials = $matches['partial'];
-      foreach ($partials as $partial) {
-         $content = str_replace("@partial('$partial')", $this->templateLoader->loadPartial($partial), $content);
+      // Patrón para capturar dos argumentos string.
+      $pattern = '/@partial\((\'|")(?<partial>[^\'"]+)\1,\s*(\'|")(?<value>[^\'"]+)\3\)/';
+
+      // Buscar todos los marcadores que coincidan con el patrón.
+      preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
+
+      foreach ($matches as $match) {
+         $partialName = $match['partial']; // Primer argumento: nombre del parcial.
+         $value = $match['value'] ?? '';         // Segundo argumento: valor.
+
+         // Cargar y procesar el contenido del parcial con los valores.
+         $partialContent = $this->templateLoader->loadPartial($partialName, $value);
+
+         // Reemplazar el marcador en el contenido original.
+         $content = str_replace($match[0], $partialContent, $content);
       }
+
       return $content;
    }
 }
