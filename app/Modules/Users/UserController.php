@@ -17,7 +17,11 @@ use Vertex\Core\VRouter\Http\Response;
 
 class UserController {
    public function index(Request $req, Response $res) {
-      return $res->render('users/index', ['title' => 'Users'])
+      $data = [
+         'title' => 'Users Module',
+         'nombre' => 'Fernando Castillo',
+      ];
+      return $res->render('users/index', $data)
          ->setStatus(200)
          ->setSession('user', 'admin', true)
          ->setCookie('user', 'admin', time() + 5, '/', '', false, true, 'Strict');

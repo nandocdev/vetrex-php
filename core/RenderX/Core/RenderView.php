@@ -30,14 +30,32 @@ class RenderView {
       $this->templateLoader = $templateLoader;
    }
 
-   public function load(string $file): string {
+   private function load(string $file): string {
       if (!file_exists($file)) {
          throw new \InvalidArgumentException("El archivo de vista no existe: $file");
       }
       return file_get_contents($file);
    }
 
-   // metodo extractPartials, busca en el contenido de la vista los marcadores @partial('partial', ?'type') y genera la ruta del archivo partial
+   public function mergeView($view, $layout): string {
+      $template = $this->load($layout);
+      $view = $this->load($view);
+      $content = str_replace('@content', $view, $template);
+      return $this->extractPartials($content);
+   }
+
+
+   public function compile(string $content, array $data): string {
+      $this->dataHandler->setData($data);
+      extract($this->dataHandler->prepareDatForView());
+
+      ob_start();
+      eval ('?>' . $content);
+      return ob_get_clean();
+   }
+
+   // metodo extractPartials, busca en el contenido de la vista los marcadores @partial('partial', ?'type') y genera la
+// ruta del archivo partial
    public function extractPartials(string $content): string {
       // Patrón para capturar dos argumentos string.
       $pattern = '/@partial\((\'|")(?<partial>[^\'"]+)\1,\s*(\'|")(?<value>[^\'"]+)\3\)/';
@@ -47,10 +65,11 @@ class RenderView {
 
       foreach ($matches as $match) {
          $partialName = $match['partial']; // Primer argumento: nombre del parcial.
-         $value = $match['value'] ?? '';         // Segundo argumento: valor.
+         $value = $match['value'] ?? 'view'; // Segundo argumento: valor.
 
          // Cargar y procesar el contenido del parcial con los valores.
-         $partialContent = $this->templateLoader->loadPartial($partialName, $value);
+         $partialPath = $this->templateLoader->loadPartial($partialName, $value);
+         $partialContent = $this->load($partialPath);
 
          // Reemplazar el marcador en el contenido original.
          $content = str_replace($match[0], $partialContent, $content);

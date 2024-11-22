@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Vertex\Core\RenderX;
 
 use Vertex\Core\Handler\Config;
+use Vertex\Core\RenderX\Core\RenderView;
 use Vertex\Core\RenderX\Core\DataHandler;
 use Vertex\Core\RenderX\Core\TemplateLoader;
 
@@ -30,31 +31,23 @@ class Render {
    private Config $config;
    private DataHandler $dataHandler;
    private TemplateLoader $templateLoader;
+   private RenderView $renderView;
 
-   /**
-    * Summary of __construct
-    * @param \Vertex\Core\Handler\Config $config
-    * @param \Vertex\Core\RenderX\Core\DataHandler $dataHandler
-    * @param \Vertex\Core\RenderX\Core\TemplateLoader $templateLoader
-    */
+
    public function __construct(Config $config, DataHandler $dataHandler, TemplateLoader $templateLoader) {
       $this->config = $config;
       $this->dataHandler = $dataHandler;
       $this->templateLoader = $templateLoader;
+      $this->renderView = new RenderView($this->config, $this->dataHandler, $this->templateLoader);
    }
 
-   /**
-    * Summary of render
-    * @param string $view
-    * @param array $data
-    * @param string $layout
-    * @return void
-    */
-   public function render(string $viewPath, string $view, array $data, string $layout): void {
+
+   public function render(string $viewPath, string $view, array $data, string $layout): string {
       $this->dataHandler->setData($data);
       $layout = $this->templateLoader->loadLayout($layout);
       $view = $this->templateLoader->loadView($view, $viewPath);
-      print_r([$layout, $view]);
+      $content = $this->renderView->mergeView($view, $layout);
+      return $this->renderView->compile($content, $this->dataHandler->prepareDatForView());
    }
 
 }

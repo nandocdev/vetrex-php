@@ -47,9 +47,8 @@ class Response {
    public function render(string $viewName, array $data = [], string $layout = 'default'): self {
       $dataHandler = new DataHandler();
       $viewLoader = new TemplateLoader($this->config);
-      // $renderView = new ();
       $view = new Render($this->config, $dataHandler, $viewLoader);
-      $view->render($this->controllerNamespace, $viewName, $data, $layout);
+      $this->setBody($view->render($this->controllerNamespace, $viewName, $data, $layout));
       return $this;
    }
 
